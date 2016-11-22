@@ -1,0 +1,12 @@
+.settings
+.classpath
+.project
+*.iml
+.idea
+log/
+target/
+.DS_Store
+*\.pyc
+*\.ipr
+*\.iws
+*~
