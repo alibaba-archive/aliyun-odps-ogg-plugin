@@ -162,7 +162,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <appendAssemblyId>false</appendAssemblyId>
+                            <appendAssemblyId>true</appendAssemblyId>
                             <finalName>datahub-ogg-plugin</finalName>
                             <descriptors>
                                 <descriptor>package.xml</descriptor>
