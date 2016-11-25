@@ -132,7 +132,7 @@ public class RecordBuilder {
             if (field != null) {
                 this.setFieldValue(recordEntry,
                         field,
-                        columns.get(i).getAfter().isValueNull(),
+                        columns.get(i).getAfter() == null || columns.get(i).getAfter().isValueNull(),
                         columns.get(i).getAfterValue(),
                         columnMapping.isDateFormat(),
                         columnMapping.getSimpleDateFormat());
@@ -142,7 +142,7 @@ public class RecordBuilder {
             if (oldField != null && columns.get(i).hasBeforeValue()) {
                 this.setFieldValue(recordEntry,
                         oldField,
-                        columns.get(i).getBefore().isValueNull(),
+                        columns.get(i).getBefore() == null || columns.get(i).getBefore().isValueNull(),
                         columns.get(i).getBeforeValue(),
                         columnMapping.isDateFormat(),
                         columnMapping.getSimpleDateFormat());
