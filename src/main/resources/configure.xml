@@ -23,6 +23,8 @@
         <ctypeColumn></ctypeColumn>
         <!-- 数据变更时间同步到datahub对应的字段，可以被columnMapping中的ctimeColumn覆盖 -->
         <ctimeColumn></ctimeColumn>
+        <!-- 额外增加的常量列，每条record该列值为指定值，格式为c1=xxx,c2=xxx，可以被columnMapping中的constColumnMap覆盖-->
+        <constColumnMap></constColumnMap>
     </defalutDatahubConfigure>
 
     <!-- 默认最严格，不落文件 直接退出 无限重试-->
@@ -61,6 +63,7 @@
             <datahubTopic>t_person</datahubTopic>
             <ctypeColumn></ctypeColumn>
             <ctimeColumn></ctimeColumn>
+            <constColumnMap></constColumnMap>
             <columnMapping>
                 <!--
                 src:oracle字段名称, 必须;

@@ -143,6 +143,12 @@ public class ConfigureReader {
             defaultCTimeField = new Field(defaultCTimeColumn, FieldType.STRING);
         }
 
+        String defaultConstColumnMapStr = element.elementText("constColumnMap");
+        Map<String, String> defalutConstColumnMappings = Maps.newHashMap();
+        Map<String, Field> defaultConstColumnFieldMappings = Maps.newHashMap();
+        parseConstColumnMap(defaultConstColumnMapStr, defalutConstColumnMappings,
+            defaultConstColumnFieldMappings);
+
         element = root.element("mappings");
         if (element == null) {
             throw new RuntimeException("mappings is null");
@@ -230,6 +236,20 @@ public class ConfigureReader {
                 new Field(ctimeColumn, FieldType.STRING) :
                 defaultCTimeField);
 
+            String constColumnMapStr = e.elementText("constColumnMap");
+            Map<String, String> constColumnMappings = Maps.newHashMap();
+            Map<String, Field> constColumnFieldMappings = Maps.newHashMap();
+            parseConstColumnMap(constColumnMapStr, constColumnMappings, constColumnFieldMappings);
+
+            tableMapping.setConstColumnMappings(
+                constColumnMappings.isEmpty() ?
+                    defalutConstColumnMappings :
+                    constColumnMappings);
+            tableMapping.setConstFieldMappings(
+                constColumnFieldMappings.isEmpty() ?
+                    defaultConstColumnFieldMappings :
+                    constColumnFieldMappings);
+
             Map<String, ColumnMapping> columnMappings = Maps.newHashMap();
             tableMapping.setColumnMappings(columnMappings);
 
@@ -310,5 +330,22 @@ public class ConfigureReader {
 
         logger.info("Read configure success: " + JsonHelper.beanToJson(configure));
         return configure;
+    }
+
+    private static void parseConstColumnMap(String constColumnMapStr,
+        Map<String, String> constColumnMappings, Map<String, Field> constColumnFieldMappings) {
+        if (constColumnMapStr == null) {
+            return;
+        }
+        String[] constColumns = constColumnMapStr.split(",");
+        for (String c: constColumns) {
+            String[] kv = c.split("=");
+            if (kv.length != 2) {
+                throw new RuntimeException(
+                    "Const column map configure is wrong, should like c1=xxx,c2=xxx,c3=xxx");
+            }
+            constColumnMappings.put(kv[0], kv[1]);
+            constColumnFieldMappings.put(kv[0], new Field(kv[0], FieldType.STRING));
+        }
     }
 }

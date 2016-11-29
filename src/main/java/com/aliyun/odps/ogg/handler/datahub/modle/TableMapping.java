@@ -42,6 +42,10 @@ public class TableMapping {
 
     private Map<String, ColumnMapping> columnMappings;
 
+    private Map<String, Field> constFieldMappings;
+
+    private Map<String, String> constColumnMappings;
+
     private String shardId;
 
     private boolean isShardHash = false;
@@ -116,5 +120,22 @@ public class TableMapping {
 
     public void setIsShardHash(boolean isShardHash) {
         this.isShardHash = isShardHash;
+    }
+
+
+    public Map<String, Field> getConstFieldMappings() {
+        return constFieldMappings;
+    }
+
+    public void setConstFieldMappings(Map<String, Field> constFieldMappings) {
+        this.constFieldMappings = constFieldMappings;
+    }
+
+    public Map<String, String> getConstColumnMappings() {
+        return constColumnMappings;
+    }
+
+    public void setConstColumnMappings(Map<String, String> constColumnMappings) {
+        this.constColumnMappings = constColumnMappings;
     }
 }
