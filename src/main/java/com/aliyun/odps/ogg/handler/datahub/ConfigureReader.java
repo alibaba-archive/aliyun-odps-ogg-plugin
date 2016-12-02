@@ -221,6 +221,8 @@ public class ConfigureReader {
             Topic topic = project.getTopic(topicName);
             if (topic == null) {
                 throw new RuntimeException("Can not find datahub topic[" + topicName + "]");
+            } else {
+                logger.info("topic name: " + topicName + ", topic schema: " + topic.getRecordSchema().toJsonString());
             }
 
             TableMapping tableMapping = new TableMapping();
