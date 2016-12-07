@@ -91,6 +91,11 @@ public class ConfigureReader {
             configure.setRetryInterval(Integer.parseInt(elementText));
         }
 
+        elementText = root.elementTextTrim("disableCheckPointFile");
+        if (StringUtils.isNotBlank(elementText)) {
+            configure.setDisableCheckPointFile(Boolean.parseBoolean(elementText));
+        }
+
         elementText = root.elementTextTrim("checkPointFileName");
         if (StringUtils.isNotBlank(elementText)) {
             configure.setCheckPointFileName(elementText);
@@ -142,6 +147,12 @@ public class ConfigureReader {
         if (StringUtils.isNotBlank(defaultCTimeColumn)) {
             defaultCTimeField = new Field(defaultCTimeColumn, FieldType.STRING);
         }
+        Field defaultCidField = null;
+        String defaultCidColumn = element.elementText("cidColumn");
+        if (StringUtils.isNotBlank(defaultCidColumn)) {
+            defaultCidField = new Field(defaultCidColumn, FieldType.STRING);
+        }
+
 
         String defaultConstColumnMapStr = element.elementText("constColumnMap");
         Map<String, String> defalutConstColumnMappings = Maps.newHashMap();
@@ -213,6 +224,7 @@ public class ConfigureReader {
 
             String ctypeColumn = e.elementText("ctypeColumn");
             String ctimeColumn = e.elementText("ctimeColumn");
+            String cidColumn = e.elementText("cidColumn");
 
             DatahubConfiguration datahubConfiguration =
                 new DatahubConfiguration(new AliyunAccount(datahubAccessId, datahubAccessKey),
@@ -237,6 +249,9 @@ public class ConfigureReader {
             tableMapping.setCtimeField(StringUtils.isNotBlank(ctimeColumn) ?
                 new Field(ctimeColumn, FieldType.STRING) :
                 defaultCTimeField);
+            tableMapping.setCidField(StringUtils.isNotBlank(cidColumn) ?
+                new Field(cidColumn, FieldType.STRING) :
+                defaultCidField);
 
             String constColumnMapStr = e.elementText("constColumnMap");
             Map<String, String> constColumnMappings = Maps.newHashMap();

@@ -28,7 +28,6 @@ import com.aliyun.odps.ogg.handler.datahub.util.BucketPath;
 import com.goldengate.atg.datasource.DsColumn;
 import com.goldengate.atg.datasource.adapt.Op;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang.time.FastDateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +41,8 @@ public class RecordBuilder {
 
     private Configure configure;
     private Map<String, Integer> latestSyncId = Maps.newHashMap();
-    private final static FastDateFormat DEFAULT_DATE_FORMATTER =
-        FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss.SSSSSS");
+    private final static SimpleDateFormat DEFAULT_DATE_FORMATTER =
+        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
 
     final static Set trueString = new HashSet() {{
         add("true");
@@ -161,14 +160,19 @@ public class RecordBuilder {
         this.setFieldValue(recordEntry, tableMapping.getCtypeField(),
             false, opType, false, null);
 
-        Date nowTime = new Date();
-        // 毫秒的string写入变更时间 (有可能重复,使用当前时间替代)
+        // 毫秒的string写入变更时间
         this.setFieldValue(recordEntry, tableMapping.getCtimeField(),
-            false, DEFAULT_DATE_FORMATTER.format(nowTime), false, null);
+            false, op.getTimestamp(), false, null);
+
+        // 写入变更序号
+        this.setFieldValue(recordEntry, tableMapping.getCidField(), false,
+            Long.toString(HandlerInfoManager.instance().getRecordId()), false, null);
+
         // 写入const columns
+        Date readTime = DEFAULT_DATE_FORMATTER.parse(op.getTimestamp());
         for (Map.Entry<String, String> e : tableMapping.getConstColumnMappings().entrySet()) {
             this.setFieldValue(recordEntry, tableMapping.getConstFieldMappings().get(e.getKey()), false,
-                BucketPath.escapeString(e.getValue(), nowTime.getTime(), tableMapping.getConstColumnMappings()), false, null);
+                BucketPath.escapeString(e.getValue(), readTime.getTime(), tableMapping.getConstColumnMappings()), false, null);
         }
 
         Integer syncId = this.latestSyncId.get(tableMapping.getOracleFullTableName());
@@ -179,7 +183,7 @@ public class RecordBuilder {
         recordEntry.putAttribute(Constant.VERSION, "1.0");
         recordEntry.putAttribute(Constant.SRC_TYPE, "Oracle");
         recordEntry.putAttribute(Constant.SRC_ID, configure.getSid());
-        recordEntry.putAttribute(Constant.TS, DEFAULT_DATE_FORMATTER.format(nowTime));
+        recordEntry.putAttribute(Constant.TS, op.getTimestamp());
         recordEntry.putAttribute(Constant.DBNAME, tableMapping.getOracleSchema());
         recordEntry.putAttribute(Constant.TABNMAE, tableMapping.getOracleTableName());
         recordEntry.putAttribute(Constant.OPER_TYPE, opType);

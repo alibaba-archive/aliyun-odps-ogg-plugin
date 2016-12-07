@@ -30,10 +30,6 @@ import com.goldengate.atg.datasource.meta.DsMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 public class DatahubHandler extends AbstractHandler {
     private final static Logger logger = LoggerFactory
             .getLogger(DatahubHandler.class);
@@ -45,6 +41,9 @@ public class DatahubHandler extends AbstractHandler {
     public void init(DsConfiguration dsConf, DsMetaData dsMeta) {
         try{
             configure = ConfigureReader.reader(configureFileName);
+
+            HandlerInfoManager.init(configure);
+            logger.info("Init HandlerInfoManager success");
 
             RecordBuilder.init(configure);
             logger.info("Init RecordBuilder success");
@@ -90,6 +89,19 @@ public class DatahubHandler extends AbstractHandler {
         OperationHandler operationHandler = OperationHandlerManager.getHandler(dsOperation.getOperationType());
 
         if (operationHandler != null) {
+            if ((!configure.isCheckPointFileDisabled()) && dsOperation.getPosition().
+                compareTo(HandlerInfoManager.instance().getSendPosition()) <= 0) {
+                logger.warn("dsOperation.getPosition(): " + dsOperation.getPosition() +
+                    " old sendPosition is: " + HandlerInfoManager.instance().getSendPosition()
+                    + ", Skip this operation, it maybe duplicated!!!");
+                return status;
+            } else {
+                // update handler info
+                HandlerInfoManager.instance().updateHandlerInfos(
+                    dsOperation.getReadTime().getTime(),
+                    dsOperation.getPosition());
+            }
+
             try {
                 operationHandler.process(op, configure);
                 PluginStatictics.addTotalOperations();
@@ -115,6 +127,9 @@ public class DatahubHandler extends AbstractHandler {
             status = status.ABEND;
             logger.error("Unable to deliver records", e1);
         }
+
+        // save checkpoints
+        HandlerInfoManager.instance().saveHandlerInfos();
 
         PluginStatictics.addTotalTxns();
         return status;
@@ -154,4 +169,5 @@ public class DatahubHandler extends AbstractHandler {
     public void setConfigure(Configure configure) {
         this.configure = configure;
     }
+
 }

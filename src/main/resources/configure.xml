@@ -23,6 +23,8 @@
         <ctypeColumn></ctypeColumn>
         <!-- 数据变更时间同步到datahub对应的字段，可以被columnMapping中的ctimeColumn覆盖 -->
         <ctimeColumn></ctimeColumn>
+        <!-- 数据变更序号同步到datahub对应的字段, 按数据变更先后递增, 不保证连续, 可以被columnMapping中的cidColumn覆盖 -->
+        <cidColumn></cidColumn>
         <!-- 额外增加的常量列，每条record该列值为指定值，格式为c1=xxx,c2=xxx，可以被columnMapping中的constColumnMap覆盖-->
         <constColumnMap></constColumnMap>
     </defalutDatahubConfigure>
@@ -47,6 +49,9 @@
     <!-- 重试间隔, 单位毫秒, 可选, 默认3000-->
     <retryInterval>3000</retryInterval>
 
+    <!-- 是否禁用checkpoint file, 可选, 默认false-->
+    <disableCheckPointFile>false</disableCheckPointFile>
+
     <mappings>
         <mapping>
             <!-- oracle schema, 见上描述-->
@@ -63,6 +68,7 @@
             <datahubTopic>t_person</datahubTopic>
             <ctypeColumn></ctypeColumn>
             <ctimeColumn></ctimeColumn>
+            <cidColumn></cidColumn>
             <constColumnMap></constColumnMap>
             <columnMapping>
                 <!--

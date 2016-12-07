@@ -100,7 +100,7 @@ public class DataHubWriter {
 
         recordEntries.add(recordEntry);
 
-        if (recordEntries.size() > configure.getBatchSize()) {
+        if (recordEntries.size() >= configure.getBatchSize()) {
             this.writeToHub(oracleFullTableName);
         }
     }
@@ -189,6 +189,8 @@ public class DataHubWriter {
                                 + topic.getTopicName() + "] success");
                     }
 
+                    // save checkpoints
+                    HandlerInfoManager.instance().saveHandlerInfos();
                     PluginStatictics.addSendTimesInTx();
                     this.recordCache.get(oracleFullTableName).clear();
                     break;

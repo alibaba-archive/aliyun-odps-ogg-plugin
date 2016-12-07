@@ -40,6 +40,8 @@ public class TableMapping {
 
     private Field ctimeField;
 
+    private Field cidField;
+
     private Map<String, ColumnMapping> columnMappings;
 
     private Map<String, Field> constFieldMappings;
@@ -106,6 +108,14 @@ public class TableMapping {
         this.ctypeField = ctypeField;
     }
 
+    public Field getCidField() {
+        return cidField;
+    }
+
+    public void setCidField(Field cidField) {
+        this.cidField = cidField;
+    }
+
     public Map<String, ColumnMapping> getColumnMappings() {
         return columnMappings;
     }
@@ -138,4 +148,5 @@ public class TableMapping {
     public void setConstColumnMappings(Map<String, String> constColumnMappings) {
         this.constColumnMappings = constColumnMappings;
     }
+
 }

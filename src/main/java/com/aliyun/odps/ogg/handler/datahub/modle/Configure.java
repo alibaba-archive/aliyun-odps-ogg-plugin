@@ -45,6 +45,8 @@ public class Configure {
 
     private Map<String, TableMapping> tableMappings;
 
+    private boolean isCheckPointFileDisable = false;
+
     public String getSid() {
         return sid;
     }
@@ -127,5 +129,13 @@ public class Configure {
 
     public TableMapping getTableMapping(String oracleFullTableName) {
         return this.tableMappings.get(oracleFullTableName);
+    }
+
+    public void setDisableCheckPointFile(boolean isDisable) {
+        isCheckPointFileDisable = isDisable;
+    }
+
+    public boolean isCheckPointFileDisabled() {
+        return isCheckPointFileDisable;
     }
 }
