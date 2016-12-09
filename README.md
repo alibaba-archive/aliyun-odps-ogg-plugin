@@ -1,5 +1,9 @@
 # Datahub Handler for Oracle GoldenGate
 
+[![Build Status](https://travis-ci.org/aliyun/aliyun-odps-ogg-plugin.svg?branch=master)](https://travis-ci.org/aliyun/aliyun-odps-ogg-plugin)
+
+---
+
 [中文版](https://datahub.console.aliyun.com/intro/guide/plugins/ogg.html)
 
 The datahub handler processes the operations of OGG trails, and upload the change logs into datahub. It has the following features:
