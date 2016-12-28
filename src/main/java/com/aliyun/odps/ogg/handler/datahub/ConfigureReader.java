@@ -351,7 +351,7 @@ public class ConfigureReader {
 
     private static void parseConstColumnMap(String constColumnMapStr,
         Map<String, String> constColumnMappings, Map<String, Field> constColumnFieldMappings) {
-        if (constColumnMapStr == null) {
+        if (StringUtils.isBlank(constColumnMapStr)) {
             return;
         }
         String[] constColumns = constColumnMapStr.split(",");
