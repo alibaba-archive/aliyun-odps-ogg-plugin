@@ -130,6 +130,10 @@ public class RecordBuilder {
         for (int i = 0; i < columns.size(); i++) {
             String columnName = op.getTableMeta().getColumnName(i).toLowerCase();
             ColumnMapping columnMapping = tableMapping.getColumnMappings().get(columnName);
+            if (columnMapping == null) {
+                logger.debug("column name : " + columnName + " is not configured.  the table name is :"  + op.getTableMeta().getTableName());
+                throw new RuntimeException("column name : " + columnName + " is not configured.  the table name is :"  + op.getTableMeta().getTableName());
+            }
             Field field = columnMapping.getField();
 
             if (field != null) {
