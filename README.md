@@ -1,3 +1,5 @@
+### Moved to aliyun/aliyun-maxcompute-data-collectors: https://github.com/aliyun/aliyun-maxcompute-data-collectors
+
 # Datahub Handler for Oracle GoldenGate
 
 [![Build Status](https://travis-ci.org/aliyun/aliyun-odps-ogg-plugin.svg?branch=master)](https://travis-ci.org/aliyun/aliyun-odps-ogg-plugin)
